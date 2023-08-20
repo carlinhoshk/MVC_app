@@ -1,7 +1,9 @@
 package io.github.carlinhoshk.mvcapp.controllers;
 
+import io.github.carlinhoshk.mvcapp.infra.security.TokenService;
 import io.github.carlinhoshk.mvcapp.model.user.AuthenticationDTO;
 
+import io.github.carlinhoshk.mvcapp.model.user.LoginResponseDTO;
 import io.github.carlinhoshk.mvcapp.model.user.RegisterDTO;
 import io.github.carlinhoshk.mvcapp.model.user.User;
 import io.github.carlinhoshk.mvcapp.repositories.UserRepository;
@@ -23,12 +25,18 @@ public class AuthenticationController {
     private AuthenticationManager authenticationManager;
     @Autowired
     private UserRepository repository;
+    @Autowired
+    private TokenService tokenService;
 
     @PostMapping("/login")
     public ResponseEntity login(@RequestBody @Valid AuthenticationDTO data) {
         var usernamePassword = new UsernamePasswordAuthenticationToken(data.login(), data.password());
         var auth = this.authenticationManager.authenticate(usernamePassword);
-        return ResponseEntity.ok().build();
+
+        var token = tokenService.generateToken((User) auth.getPrincipal());
+
+
+        return ResponseEntity.ok(new LoginResponseDTO(token));
 
     }
 
