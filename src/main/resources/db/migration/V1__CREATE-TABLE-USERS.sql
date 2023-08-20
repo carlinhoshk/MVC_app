@@ -1,6 +1,6 @@
 CREATE TABLE users (
-    id TEXT PRIMARY KEY,
-    login TEXT NOT NULL,
-    password TEXT NOT NULL,
-    role TEXT NOT NULL
+    id VARCHAR(255) PRIMARY KEY NOT NULL,
+    login VARCHAR(255) NOT NULL UNIQUE,
+    password VARCHAR(255) NOT NULL,
+    role VARCHAR(255) NOT NULL
 );
