@@ -1,5 +1,4 @@
 package io.github.carlinhoshk.mvcapp.model.user;
-
 public enum UserRole {
     ADMIN("admin"),
     USER("user");

@@ -2,7 +2,6 @@ package io.github.carlinhoshk.mvcapp.controllers;
 
 import io.github.carlinhoshk.mvcapp.infra.security.TokenService;
 import io.github.carlinhoshk.mvcapp.model.user.AuthenticationDTO;
-
 import io.github.carlinhoshk.mvcapp.model.user.LoginResponseDTO;
 import io.github.carlinhoshk.mvcapp.model.user.RegisterDTO;
 import io.github.carlinhoshk.mvcapp.model.user.User;
@@ -29,19 +28,17 @@ public class AuthenticationController {
     private TokenService tokenService;
 
     @PostMapping("/login")
-    public ResponseEntity login(@RequestBody @Valid AuthenticationDTO data) {
+    public ResponseEntity login(@RequestBody @Valid AuthenticationDTO data){
         var usernamePassword = new UsernamePasswordAuthenticationToken(data.login(), data.password());
         var auth = this.authenticationManager.authenticate(usernamePassword);
 
         var token = tokenService.generateToken((User) auth.getPrincipal());
 
-
         return ResponseEntity.ok(new LoginResponseDTO(token));
-
     }
 
     @PostMapping("/register")
-    public ResponseEntity register(@RequestBody @Valid RegisterDTO data) {
+    public ResponseEntity register(@RequestBody @Valid RegisterDTO data){
         if(this.repository.findByLogin(data.login()) != null) return ResponseEntity.badRequest().build();
 
         String encryptedPassword = new BCryptPasswordEncoder().encode(data.password());
